@@ -23,16 +23,15 @@ def tournament_setup():
     tournament_name = input("\nWhat would you like to call your tournament? ")
     tournament = Tournament(tournament_name)
 
-    participant_count = request_integer_input("How many participants will enter this tournament? ")
+    participant_count = input("How many participants will enter this tournament? ")
 
-    participants = gather_participants(participant_count)
+    participants = []
 
     print("\nYour tournament is ready to be scheduled. Creating calendar invites now!")
 
-    tournament.create_rounds(participants)
+    tournament.create_games(participants)
     print(f'{tournament=}')
 
-    schedule_tournament(tournament)
     tournament.save()
 
 
@@ -67,10 +66,18 @@ def tournament_changes():
 
     tournament.update_game(game_id, player_1, player_2)
 
-    update_game_event(tournament.games[game_id])
-
     starting_menu()
 
+
+# Milestone 2 part 1
+# Must return a list of UNIQUE participants equal to the count
+def request_participants(count):
+    pass
+
+# Milestone 2 part 1
+# Must ask for input and only accept multiples of two
+def request_participant_count():
+    pass
 
 """ Helpers:
 """
@@ -81,19 +88,6 @@ def request_integer_input(message):
         int_input = input(message).strip()
 
     return int(int_input)
-
-# Must return a list of unique participants equal to the count
-def gather_participants(count):
-    participant_set = set()
-    while len(participant_set) < count:
-        new_participant = input("Please enter the name of the next participant: ")
-
-        while new_participant in participant_set:
-            new_participant = input("We already have registered this participant! please share a new name: ")
-
-        participant_set.add(new_participant)
-
-    return list(participant_set)
 
 if __name__ == '__main__':
     starting_menu()
