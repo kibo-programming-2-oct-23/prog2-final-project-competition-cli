@@ -199,17 +199,21 @@ Total points: **85**
 Milestone 1:
 - unit tests for power_of_two - **5 Points**
 - unit_tests for compute_round_name  **5 Points**
+
 Milestone 2:
 - correct implementation of `request_participant_count`  **5 Points**
 - correct implementation of `request_participants`  **5 Points**
 - correct implementation of `save` **10 Points**
 - correct implementation of `load` **10 Points**
+
 Milestone 3:
 - correct implementation of `game.update` **5 Points**
 - correct implementation of `tournament.update_game` **5 Points**
+
 Milestone 4:
 - correct implementation of `update` **15 Points**
+
 Milestone 5:
 - correct revision of `Game` **5 Points**
-- correct implementation of `scheduler.save_game` **5 Points**
-- correct implementation of `scheduler.update_game` **10 Points**
+- correct implementation of `scheduler.schedule_tournament` **10 Points**
+- correct implementation of `scheduler.update_game_event` **5 Points**
