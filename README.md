@@ -1,35 +1,12 @@
 # Project overview
 
-The main challenge ahead of you will be reading and understanding. We will provide you with quite a bit of code, and guide you through what you need to do to complete it. Your focus should be on starting this early, testing each step, and seeking support from this document first, then from the rest of the community next.
-
-I hope you will have fun, learn plenty, and enjoy building your biggest program yet!
-
-# What are we building?
 We will build a Command-Line tool that lets you organize a tournament! Say you want to organize a dance off, or a chess competition, or any other kind of competition you can think of? Our tool will help you do that.
 
-## Key features:
-- We can create a tournament, setting its date and all its participants.
-- Our software will generate all the "games" required to run this tournament. We want to know when the game is happening, and who is competing in it!
-- We will save all this information to a file, so we can continue working on our tournament even after exiting the program!
-- We will create an event on [EventBrite](https://www.eventbrite.com/organizations/home) to keep track of all the games.
+Your tournament's information will be saved in a file, so we can modify it later in time. 
 
-## The abstraction.
+We will also use the EventBrite API to schedule all the games in our tournament!
 
-A `Game` can really refer to any sport or activity that engages two players or two teams. Our `Game` objects will need to keep track of a few important information:
-- Player 1 and Player 2. These are simple string that tell us who will be participating in a game.
-- A start time and an end time. Each game should know when it begins, and when it should end.
-- A name: This is a short description of the game that we can display. In particular, this should tell us how the game fits in the competition. a game's name could be "Round of 32 game 5" or "Final game 1"
-
-A `Tournament` is a collection of games. First of all though, we want to give our tournament a name: This tells us what the event is: Are we doing a race? a freestyle dance competition? are we playing scrabble?
-
-The `Tournament` object will be responsible for creating all the necessary `Game` objects. In order to do that though, it will need some extra information:
-- A start date: This lets us know when the first games should be scheduled. (In the provided code, this is hardcoded to start the day after you create the tournament in the CLI)
-- An interval: This lets us know how many days to wait between rounds (This is hardcoded to be two days in the provided code).
-- A game duration: This lets us know how long each game should run, so we can compute the end time for games. (This is also currently hardcoded)
-
-The kind of tournament we will create is called a [single elimitation tournament](https://en.wikipedia.org/wiki/Single-elimination_tournament). We trust this `Tournament` class to know how to create all the right games, given the info above and a list of participants.
-
-There is a lot to do so let's get started with our milestones:
+We will provide you with a lot of code already, but it's up to you to make the following key features happen over the following milestones
 
 # Milestone 1: Understanding the code you are provided
 ## main.py:
@@ -99,7 +76,24 @@ You should be able to generate a similar experience as the two examples below:
 Note how when we entered Magnus a second time, we received another prompt? that's what your code should be able to do.
 
 ## Part 2: Saving the game:
-After the previous part, you should be able to provide the tournament with all the right information. 
+
+### The abstraction.
+
+We're finally getting into the heart of the tournament, so let's think about our abstractions in more details
+
+A `Game` can really refer to any sport or activity that engages two players or two teams. Our `Game` objects will need to keep track of a few important information:
+- Player 1 and Player 2. These are simple string that tell us who will be participating in a game.
+- A start time and an end time. Each game should know when it begins, and when it should end.
+- A name: This is a short description of the game that we can display. In particular, this should tell us how the game fits in the competition. a game's name could be "Round of 32 game 5" or "Final game 1"
+
+A `Tournament` is a collection of games. First of all though, we want to give our tournament a name: This tells us what the event is: Are we doing a race? a freestyle dance competition? are we playing scrabble?
+
+The `Tournament` object will be responsible for creating all the necessary `Game` objects. In order to do that though, it will need some extra information:
+- A start date: This lets us know when the first games should be scheduled. (In the provided code, this is hardcoded to start the day after you create the tournament in the CLI)
+- An interval: This lets us know how many days to wait between rounds (This is hardcoded to be two days in the provided code).
+- A game duration: This lets us know how long each game should run, so we can compute the end time for games. (This is also currently hardcoded)
+
+The kind of tournament we will create is called a [single elimitation tournament](https://en.wikipedia.org/wiki/Single-elimination_tournament). We trust this `Tournament` class to know how to create all the right games, given the info above and a list of participants.
 
 Let's make sure that information is saved so we can reload it. Our format for this will be as follows.
 
