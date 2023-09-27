@@ -34,6 +34,8 @@ Your first task is to write unit tests for _every_ function defined in untested_
 
 As a rule of thumb, you should not blindly trust any untested code provided to you, and this applies to this project as well. Read through the comments on each function, and write corresponding unit tests before moving on to Milestone 2
 
+Create a new file called `milestone1_tests1.py` and setup your tests there. Do not overwrite or modify the provided `test.py`
+
 # Milestone 2: Saving and Loading tournaments. 
 
 ## Part 1: gathering the right data

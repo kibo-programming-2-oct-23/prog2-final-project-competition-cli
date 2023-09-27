@@ -19,7 +19,7 @@ class Game:
         return self.description()
 
     # Milestone 3
-    def update(self):
+    def update(self, player_1, player_2):
         pass
 
     def to_json_string(self):

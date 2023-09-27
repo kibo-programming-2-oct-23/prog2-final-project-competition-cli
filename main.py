@@ -23,8 +23,10 @@ def tournament_setup():
     tournament_name = input("\nWhat would you like to call your tournament? ")
     tournament = Tournament(tournament_name)
 
+    # This should be improved in milestone 2
     participant_count = input("How many participants will enter this tournament? ")
 
+    # This should be improved in milestone 2
     participants = []
 
     print("\nYour tournament is ready to be scheduled. Creating calendar invites now!")

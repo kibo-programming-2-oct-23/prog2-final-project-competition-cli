@@ -76,6 +76,7 @@ class EventBriteAPIHelper:
 
     # Milestone 4
     def update_event(self, event_id, title, description, start_time, end_time):
+        # This method does not need to return anything. It can end as you send the request
         pass
 
     ########### HELPERS ###############
