@@ -1,16 +1,16 @@
 import unittest
+from unittest.mock import Mock, patch
 
 from tournament import Tournament
 from game import Game
+from main import request_participant_count, request_participants
 
-class TestTournamentCLI(unittest.TestCase):
-    from main import request_participant_count, request_participants
+# class TestTournamentCLI(unittest.TestCase):
+#     def test_request_participant_count(self):
+#         pass
 
-    def test_request_participant_count(self):
-        pass
-
-    def test_request_participants(self):
-        pass
+#     def test_request_participants(self):
+#         pass
 
 class TestGame(unittest.TestCase):
     # Milestone 3
@@ -18,16 +18,16 @@ class TestGame(unittest.TestCase):
         test_game = Game("test", "start_time", "end_time", "unknown", "unknown")
 
         test_game.update("Team A", "Team B")
-        assert test_game.player1 == "Team A"
-        assert test_game.player2 == "Team B"
+        assert test_game.player_1 == "Team A"
+        assert test_game.player_2 == "Team B"
 
         test_game.update("Team C", "")
-        assert test_game.player1 == "Team C"
-        assert test_game.player2 == "Team B"
+        assert test_game.player_1 == "Team C"
+        assert test_game.player_2 == "Team B"
 
         test_game.update("", "Team D")
-        assert test_game.player1 == "Team C"
-        assert test_game.player2 == "Team D"
+        assert test_game.player_1 == "Team C"
+        assert test_game.player_2 == "Team D"
 
 class TestTournament(unittest.TestCase):
     # Milestone 2
@@ -41,15 +41,21 @@ class TestTournament(unittest.TestCase):
         with patch('builtins.open', unittest.mock.mock_open()) as mock_file:
             test_tournament.save()
             mock_file.assert_called_once_with('test.games', 'w')
-            mock_file().write.assert_called_once_with(test_game.to_json_string())
-            mock_file().write.assert_called_once_with(test_game_two.to_json_string())
 
-    def load_tournament(self):
+            # Hacky but works, gets all the arguments to write, then looks for specific strings within
+            args_set = {call.args[0] for call in mock_file().write.call_args_list}
+
+            assert test_game.to_json_string() in args_set
+            assert test_game_two.to_json_string() in args_set
+            assert '\n' in args_set
+
+    # Milestone 2
+    def test_load_tournament(self):
         test_game = Game("test", "start_time", "end_time", "Team A", "Team B")
         test_game_two = Game("test", "start_time", "end_time", "unknown", "unknown")
 
         # utility mock provided by unittest to handle file opening
-        with patch('builtins.open', unittest.mock.mock_open(read_data = f'{test_game.to_json_string()}\n{test_game_two.to_json_string()}'))) as mock_file:
+        with patch('builtins.open', unittest.mock.mock_open(read_data = f'{test_game.to_json_string()}\n{test_game_two.to_json_string()}')) as mock_file:
             new_tournament = Tournament.load_tournament("test")
 
             mock_file.assert_called_once_with('test.games', 'r')
@@ -64,50 +70,60 @@ class TestTournament(unittest.TestCase):
 
         test_tournament = Tournament("test", [test_game, test_game_two])
 
-        test_tournament.update(1, "", "New Player")
-        assert test_game_two.player2 == "New Player"
-        assert test_game_two.player1 == "unknown"
-        assert test_game.player1 == "Team A"
-        assert test_game.player2 == "Team B"
+        test_tournament.update_game(1, "", "New Player")
+        assert test_game_two.player_2 == "New Player"
+        assert test_game_two.player_1 == "unknown"
+        assert test_game.player_1 == "Team A"
+        assert test_game.player_2 == "Team B"
 
         with self.assertRaises(IndexError):
-            test_tournament.update(2, "A", "B")
+            test_tournament.update_game(2, "A", "B")
 
 class TestEvenBriteClient(unittest.TestCase):
-    from event_brite_client import EventBriteAPIHelper
 
     def test_update_event(self):
-        with patch('builtins.open', unittest.mock.mock_open(read_data = "fake_api_key")):
-            client = EventBriteAPIHelper()
+        import event_brite_client
 
-            client.update_event('some_id', 'new title', 'new description', 'new start_time', 'new end_time')
+        api_key = "fake_api_key"
+        with patch('builtins.open', unittest.mock.mock_open(read_data = api_key)):
+            client = event_brite_client.EventBriteAPIHelper()
+            # import pdb
+            # pdb.set_trace()
+            event_brite_client.request = Mock()
 
-            request = Mock()
+            event_brite_client.request.Request = Mock()
 
-            request.urlopen.assertCalledWith(None)
+            client.update_event('some_id', 'new title', 'new description', '2033-01-01T00:00:00Z', '2033-12-12T00:00:00Z')
+            event_brite_client.request.Request.assert_called_with(f'https://www.eventbriteapi.com/v3/events/some_id/?token={api_key}', method = 'POST')
+            event_brite_client.request.urlopen.assert_called_once()
+
+            assert event_brite_client.request.urlopen.call_args.kwargs.get('data') == b'{"event": {"currency": "USD", "name": {"html": "new title"}, "description": {"html": "new description"}, "start": {"timezone": "UTC", "utc": "2033-01-01T05:00:00Z"}, "end": {"timezone": "UTC", "utc": "2033-12-12T05:00:00Z"}}}'
+
 
 class TestScheduler(unittest.TestCase):
-    sys.modules['event_brite_client'] = Mock()
-    from scheduler import Scheduler
+    def setUp(self):
+        self.test_game = Game("test", "start_time", "end_time", "Team A", "Team B")
+        test_game_two = Game("test", "start_time", "end_time", "unknown", "unknown")
+        self.test_tournament = Tournament("test", [self.test_game, test_game_two])
 
     def test_schedule_tournament(self):
-        test_game = Game("test", "start_time", "end_time", "Team A", "Team B")
-        test_game_two = Game("test", "start_time", "end_time", "unknown", "unknown")
+        import scheduler
+        scheduler.EventBriteAPIHelper = Mock()
 
-        test_tournament = Tournament("test", [test_game, test_game_two])
+        scheduler_object = scheduler.Scheduler()
+        scheduler_object.schedule_tournament(self.test_tournament)
 
-        scheduler = Scheduler()
-        scheduler.schedule_tournament()
-
-        assert scheduler.client.create_event.call_count == len(tournament.games)
+        assert scheduler_object.client.create_event.call_count == len(self.test_tournament.games)
 
     def test_update_game_event(self):
-        test_game = Game("test", "start_time", "end_time", "Team A", "Team B")
-        scheduler = Scheduler()
+        import scheduler
+        scheduler.EventBriteAPIHelper = Mock()
 
-        scheduler.update_game(test_game)
+        scheduler_object = scheduler.Scheduler()
 
-        scheduler.client.update_event.assert_called_once()
+        scheduler_object.update_game_event(self.test_game)
+
+        scheduler_object.client.update_event.assert_called_once()
 
 if __name__ == "__main__":
     unittest.main()

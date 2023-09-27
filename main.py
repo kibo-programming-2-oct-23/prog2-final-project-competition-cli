@@ -1,6 +1,5 @@
 import sys
 from tournament import Tournament
-from scheduler import schedule_tournament, update_game_event
 
 def starting_menu():
     print("*************************************************************")

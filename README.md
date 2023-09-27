@@ -106,6 +106,8 @@ Read through the `Game` class, and look at the `to_json_string` method, you can 
 
 You should be able to create a tournament now, let's call it test_tournament, then see that a test_tournament.games file was created, which contains all the games needed
 
+By this stage, the `test_save_tournament` should be passing when you run unit tests
+
 ## Part 3: Loading the game:
 What good is saving if we can't load? Our cli is already set up to ask the user to provide a tournament name. we need to complete the `load_tournament` method:
 
@@ -117,6 +119,8 @@ You can then return a new tournament object that contains all those games!
 
 You should select option #2 in the CLI, and see that after closing the program, you can load a tournament and see all its games!
 
+By this stage, the `test_load_tournament` should be passing when you run unit tests
+
 # Milestone 3: Updating the tournament
 As the tournament progress, and we play games, we will want to update games with no known players. 
 
@@ -124,6 +128,8 @@ Look at the `tournament_changes()` method in `main.py` and read through it caref
 - Complete the `update_game` method in the `Tournament` class. 
 - This method should rely on the `update` method in the `Game` class.
 - Don't forget that we need all of this saved on file! make sure that the file for your tournament is updated accordingly
+
+By this stage, the `test_tournament_update` and `test_game_update` should be passing when you run unit tests
 
 # Milestone 4: To the internet!
 Let's step away from thinking about games and tournaments and files and all of that. One of our goals is to schedule events for our games on the internet, and this milestone will focus on just that. If this was a team project, a team member could've started here!
@@ -164,6 +170,8 @@ For this milestone, you have to complete the `update_event` method of the `Event
 
 Before moving forward, test this by running your method with the id of the event you've already created as an input!
 
+By this stage, the `test_update_event` and should be passing when you run unit tests
+
 # Milstone 5: Putting it all together
 At this stage, we have games and tournaments that we can save locally and it all works ok. We have a class that knows how to create an event and how to update it. Let's bring this all together so we have a fully working program!
 
@@ -188,6 +196,8 @@ We may have a problem here. In order to update a game, we need to know it's even
 You should be able to see event id stored within your local save file.
 
 Once you've accomplished this, then finishing `update_game_event` should be very similar to the work you did in the previous step. And with this, you should be able to create tournaments, load them, modify their games, and have all your changes reflect on eventbrite. Well done!
+
+By this point, the `test_schedule_tournament` and `test_update_game_event` tests should be passing. Congratulations on being done!
 
 # Rubric:
 Total points: **85**
