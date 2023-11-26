@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import Mock, patch
+from helpers import datetime_to_eventbrite_format
 
 from tournament import Tournament
 from game import Game
@@ -92,12 +93,17 @@ class TestEvenBriteClient(unittest.TestCase):
             event_brite_client.request = Mock()
 
             event_brite_client.request.Request = Mock()
+            start_time = '2033-01-01T00:00:00Z'
+            end_time = '2033-12-12T00:00:00Z'
 
-            client.update_event('some_id', 'new title', 'new description', '2033-01-01T00:00:00Z', '2033-12-12T00:00:00Z')
+            client.update_event('some_id', 'new title', 'new description', start_time, end_time)
             event_brite_client.request.Request.assert_called_with(f'https://www.eventbriteapi.com/v3/events/some_id/?token={api_key}', method = 'POST')
             event_brite_client.request.urlopen.assert_called_once()
 
-            assert event_brite_client.request.urlopen.call_args.kwargs.get('data') == b'{"event": {"currency": "USD", "name": {"html": "new title"}, "description": {"html": "new description"}, "start": {"timezone": "UTC", "utc": "2033-01-01T05:00:00Z"}, "end": {"timezone": "UTC", "utc": "2033-12-12T05:00:00Z"}}}'
+            expected_start_time = datetime_to_eventbrite_format(start_time)
+            expected_end_time = datetime_to_eventbrite_format(end_time)
+            expected_result = b'{"event": {"currency": "USD", "name": {"html": "new title"}, "description": {"html": "new description"}, "start": {"timezone": "UTC", "utc": "%s"}, "end": {"timezone": "UTC", "utc": "%s"}}}' % (expected_start_time.encode('utf-8'), expected_end_time.encode('utf-8'))
+            assert event_brite_client.request.urlopen.call_args.kwargs.get('data') == expected_result
 
 
 class TestScheduler(unittest.TestCase):
