@@ -315,9 +315,9 @@ changes reflected on Eventbrite. Well done!
 By this point, the `test_schedule_tournament` and `test_update_game_event` tests
 should be passing. Congratulations on being done!
 
-## Rubric
+## Grading
 
-Total points: **85**
+### Correctness and Completeness (85 points)
 
 Milestone 1:
 
@@ -345,3 +345,13 @@ Milestone 5:
 - correct revision of `Game` **5 Points**
 - correct implementation of `scheduler.schedule_tournament` **10 Points**
 - correct implementation of `scheduler.update_game_event` **5 Points**
+
+### Coding Style (15 points)
+
+| Criteria                            | Proficient                                        | Competent                                          | Developing                                       |
+|-------------------------------------|---------------------------------------------------|----------------------------------------------------|--------------------------------------------------|
+| **Coding Style**   ||||
+| 1. Indentation and Formatting       | Code is consistently well-indented and follows PEP 8 formatting guidelines. | Code is mostly well-indented and follows PEP 8 guidelines with minor deviations. | Code lacks consistent indentation and does not follow PEP 8 guidelines. |
+| 2. Naming Conventions               | Meaningful and consistent variable/function/class names following PEP 8 conventions. | Mostly meaningful names, with occasional inconsistencies. | Variable/function/class names are unclear or inconsistent. |
+| 3. Comments and Documentation       | Comprehensive comments and clear documentation for major functions and complex logic. | Adequate comments explaining major sections of code. | Lack of comments or insufficient documentation. |
+| 4. Appropriate Use of Language Constructs | Demonstrates advanced understanding and appropriate use of Python language constructs (e.g., list comprehensions, generators). | Generally applies language constructs correctly, with occasional lapses. | Misuses or misunderstands key language constructs. |
