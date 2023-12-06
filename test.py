@@ -44,11 +44,17 @@ class TestTournament(unittest.TestCase):
             mock_file.assert_called_once_with('test.games', 'w')
 
             # Hacky but works, gets all the arguments to write, then looks for specific strings within
-            args_set = {call.args[0] for call in mock_file().write.call_args_list}
+            # This is brittle because if the code under test appends the end of line characters to the json
+            # before writing, this test will fail.
+            # args_set = {call.args[0] for call in mock_file().write.call_args_list}
 
-            assert test_game.to_json_string() in args_set
-            assert test_game_two.to_json_string() in args_set
-            assert '\n' in args_set
+            # assert test_game.to_json_string() in args_set
+            # assert test_game_two.to_json_string() in args_set
+            # assert '\n' in args_set
+
+            written_data = ''.join(call.args[0] for call in mock_file().write.call_args_list)
+            expected_data = f"{test_game.to_json_string()}\n{test_game_two.to_json_string()}\n"
+            assert written_data == expected_data
 
     # Milestone 2
     def test_load_tournament(self):
