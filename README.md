@@ -282,7 +282,7 @@ Let's start with the `schedule_tournament` function. This should take a
 tournament as an input, then _extract_ information from all its games, passing
 them to the `create_event` method of `EventBriteAPIHelper`.
 
-The big question is: When should we call the `save_game` method? That is up to
+The big question is: When should we call the `schedule_tournament` method? That is up to
 you to figure out. At the end of this step though you should be able to create a
 brand new tournament, then go to your [Eventbrite
 page](https://www.eventbrite.com/organizations/home) and see all the
