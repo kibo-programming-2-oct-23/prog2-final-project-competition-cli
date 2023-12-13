@@ -62,7 +62,8 @@ class EventBriteAPIHelper:
         url = f'https://www.eventbriteapi.com/v3/organizations/{organization_id}/events/?token={self.token}'
 
         # You should prepare your request as follows whenever you send data to eventbrite
-        req = request.Request(url, method="POST").add_header('Content-Type', 'application/json')
+        req = request.Request(url, method="POST")
+        req.add_header('Content-Type', 'application/json')
         
         # This line is what actually sends data over.
         opened_request = request.urlopen(req, data=data)
